@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Minha Barbearia{% endblock %}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; text-align: center; }
+        header { background: #333; color: white; padding: 15px; }
+        nav a { color: white; margin: 0 15px; text-decoration: none; }
+        main { padding: 20px; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Minha Barbearia</h1>
+        <nav>
+            <a href="{% url 'home' %}">Início</a>
+            <a href="{% url 'servicos' %}">Serviços</a>  <!-- Novo Link -->
+            <a href="#">Agendamentos</a>
+        </nav>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>
