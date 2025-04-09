@@ -1,0 +1,52 @@
+# Ambiente virtual
+venv/
+env/
+ENV/
+.venv/
+.env/
+
+# Arquivos do Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Arquivos de log
+*.log
+
+# Arquivos do Django
+db.sqlite3
+media/
+staticfiles/
+
+# Configurações de IDEs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# Arquivos de testes e cobertura
+htmlcov/
+.coverage
+.tox/
+.noseids
+.pytest_cache/
+.cache/
+
+# Arquivos de migração indesejados (opcional, só se você tiver certeza de não querer subir)
+# **/migrations/
+
+# Variáveis de ambiente
+.env
+.env.*
+
+# Arquivos do MyPy
+.mypy_cache/
+
+# Arquivos do PyInstaller
+dist/
+build/
+*.spec
