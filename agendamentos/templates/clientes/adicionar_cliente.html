@@ -1,0 +1,125 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Clientes</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<div class="container">
+    <h1 id="titulo-form">Adicionar Novo Cliente</h1>
+
+    <form id="form-cliente">
+        {% csrf_token %}
+        <input type="hidden" id="cliente-id">  <!-- escondido para saber se está editando -->
+        
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" required>
+
+        <label for="telefone">Telefone:</label>
+        <input type="text" id="telefone" name="telefone" required>
+
+        <label for="email">Email (opcional):</label>
+        <input type="email" id="email" name="email">
+
+        <button type="submit">Salvar Cliente</button>
+    </form>
+
+    <hr>
+
+    <h2>Clientes Cadastrados</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Telefone</th>
+                <th>Email</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody id="tabela-clientes">
+        {% for cliente in clientes %}
+            <tr data-id="{{ cliente.id }}">
+                <td class="col-nome">{{ cliente.nome }}</td>
+                <td class="col-telefone">{{ cliente.telefone }}</td>
+                <td class="col-email">{{ cliente.email }}</td>
+                <td>
+                    <button onclick="editarCliente(this)">Editar</button>
+                    <button onclick="excluirCliente({{ cliente.id }})">Excluir</button>
+                </td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="4">Nenhum cliente cadastrado.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const form = document.getElementById("form-cliente");
+
+    form.addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        const id = document.getElementById("cliente-id").value;
+        const nome = document.getElementById("nome").value;
+        const telefone = document.getElementById("telefone").value;
+        const email = document.getElementById("email").value;
+
+        const url = id ? `/clientes/editar/${id}/` : `{% url 'adicionar_cliente' %}`;
+        const method = id ? "PUT" : "POST";
+
+        fetch(url, {
+            method: method,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ nome, telefone, email })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.sucesso) {
+                alert(id ? "Cliente atualizado!" : "Cliente cadastrado!");
+                location.reload();
+            } else {
+                alert(data.erro || "Erro ao salvar cliente.");
+            }
+        });
+    });
+});
+
+function editarCliente(botao) {
+    const row = botao.closest("tr");
+    const id = row.getAttribute("data-id");
+    const nome = row.querySelector(".col-nome").textContent;
+    const telefone = row.querySelector(".col-telefone").textContent;
+    const email = row.querySelector(".col-email").textContent;
+
+    document.getElementById("cliente-id").value = id;
+    document.getElementById("nome").value = nome;
+    document.getElementById("telefone").value = telefone;
+    document.getElementById("email").value = email;
+    document.getElementById("titulo-form").textContent = "Editar Cliente";
+}
+
+function excluirCliente(id) {
+    if (confirm("Tem certeza que deseja excluir?")) {
+        fetch(`/clientes/excluir/${id}/`, {
+            method: "DELETE"
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.sucesso) {
+                alert("Cliente excluído!");
+                location.reload();
+            } else {
+                alert("Erro ao excluir cliente.");
+            }
+        });
+    }
+}
+</script>
+</body>
+</html>
