@@ -1,0 +1,33 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Agendamentos</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Agendar Horário</h1>
+<!-- Nome do Cliente -->
+<label for="cliente">Cliente:</label>
+<select id="cliente" name="cliente" required>
+    <option value="">Selecione um cliente</option>
+    {% for cliente in clientes %}
+        <option value="{{ cliente.id }}">{{ cliente.nome }}</option>
+    {% endfor %}
+</select>
+
+<!-- Serviço -->
+<label for="servico">Serviço:</label>
+<select id="servico" name="servico" required>
+    <option value="">Selecione um serviço</option>
+    {% for servico in servicos %}
+        <option value="{{ servico.id }}">{{ servico.nome }} - R$ {{ servico.preco }}</option>
+    {% endfor %}
+</select>
+
+    </div>
+</body>
+</html>
